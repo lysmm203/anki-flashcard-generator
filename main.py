@@ -24,4 +24,42 @@ if __name__ == '__main__':
     # There is possibility of no synonyms
     # synonym = response[0]['meanings'][0]['synonyms'][0]
 
+    deck_css = """
+    .card{
+        text-align: center;
+        font-size: 30px;
+    }
+    """
+
+    test_model = genanki.Model(
+        1607392319,
+        'GRE_Vocab_Model',
+        fields=[
+            {'name': 'Question'},
+            {'name': 'Answer'}
+        ],
+        templates=[
+            {'name': 'Card 1',
+            'qfmt': '{{Question}}',
+            'afmt': '{{FrontSide}}<hr id="answer">{{Answer}}'
+            }
+        ],
+        css=deck_css
+    )
+
+    test_note = genanki.Note(
+        model = test_model,
+        fields = ['This is a question', 'This is an answer']
+    )
+
+    test_deck = genanki.Deck(
+        2059400110,
+        'test_deck'
+    )
+    test_deck.add_note(test_note)
+
+    genanki.Package(test_deck).write_to_file('test.apkg')
+
+
+
     print('a')
