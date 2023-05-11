@@ -20,37 +20,14 @@ if __name__ == '__main__':
                 columns[index].append(word)
                 index += 1
 
-    deck_css = """
-        .card{
-            text-align: center;
-            font-size: 30px;
-        }
-        """
-
-    deck_model = genanki.Model(
-        1607393419,
-        'GRE_Vocab_Model',
-        fields=[
-            {'name': 'Question'},
-            {'name': 'Answer'}
-        ],
-        templates=[
-            {'name': 'Card 1',
-             'qfmt': '{{Question}}',
-             'afmt': '{{FrontSide}}<hr id="answer">{{Answer}}'
-             }
-        ],
-        css=deck_css
-    )
-    response = requests.get(f'https://www.merriam-webster.com/dictionary/determine')
-    soup = BeautifulSoup(response.content, 'html.parser')
-    definition = soup.find(class_=['sb-0', 'sb-entry']).get_text()
-    definition1 = definition.replace('\n', ' ')
-    definition2 = definition1[8: -4]
-    print('a')
+    for group in columns:
+        for word in columns[group]:
+            pass
 
 
 
+
+    #
     # for group in columns:
     #     anki_deck = genanki.Deck(
     #         random.randrange(1 << 30, 1 << 31),
@@ -70,5 +47,5 @@ if __name__ == '__main__':
     #         anki_deck.add_note(note)
     #
     #     genanki.Package(anki_deck).write_to_file(f'GRE Vocab Group {group}.apkg')
-
+    #
 
