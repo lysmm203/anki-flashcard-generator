@@ -10,7 +10,7 @@ class Vocabulary:
         self.synonyms = None
 
     def get_soup(self):
-        response = requests.get(f'https://www.merriam-webster.com/dictionary/f{self.word}')
+        response = requests.get(f'https://www.merriam-webster.com/dictionary/{self.word}')
         self.soup = BeautifulSoup(response.content, 'html.parser')
 
     def get_definition(self):
@@ -31,4 +31,6 @@ class Vocabulary:
             for synonym in synonym_list:
                 synonyms.append(synonym.text)
 
-        self.synonyms = synonyms
+        synonym_string = ', '.join(synonyms)
+
+        self.synonyms = synonym_string
