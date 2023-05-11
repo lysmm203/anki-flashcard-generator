@@ -1,5 +1,7 @@
 import csv
 from collections import defaultdict
+import requests
+import genanki
 
 if __name__ == '__main__':
 
@@ -16,7 +18,10 @@ if __name__ == '__main__':
                 columns[index].append(word)
                 index += 1
 
-    print(columns)
+    response = requests.get('https://api.dictionaryapi.dev/api/v2/entries/en/determination').json()
+    definition = response[0]['meanings'][0]['definitions'][0]['definition']
 
+    # There is possibility of no synonyms
+    # synonym = response[0]['meanings'][0]['synonyms'][0]
 
-    # 1. Create an index variable. As you iterate through the rows, increment it and add it t
+    print('a')
