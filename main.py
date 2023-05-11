@@ -2,6 +2,8 @@ import csv
 from collections import defaultdict
 import requests
 import genanki
+import random
+from bs4 import BeautifulSoup
 
 if __name__ == '__main__':
 
@@ -18,21 +20,15 @@ if __name__ == '__main__':
                 columns[index].append(word)
                 index += 1
 
-    response = requests.get('https://api.dictionaryapi.dev/api/v2/entries/en/determination').json()
-    definition = response[0]['meanings'][0]['definitions'][0]['definition']
-
-    # There is possibility of no synonyms
-    # synonym = response[0]['meanings'][0]['synonyms'][0]
-
     deck_css = """
-    .card{
-        text-align: center;
-        font-size: 30px;
-    }
-    """
+        .card{
+            text-align: center;
+            font-size: 30px;
+        }
+        """
 
-    test_model = genanki.Model(
-        1607392319,
+    deck_model = genanki.Model(
+        1607393419,
         'GRE_Vocab_Model',
         fields=[
             {'name': 'Question'},
@@ -40,26 +36,39 @@ if __name__ == '__main__':
         ],
         templates=[
             {'name': 'Card 1',
-            'qfmt': '{{Question}}',
-            'afmt': '{{FrontSide}}<hr id="answer">{{Answer}}'
-            }
+             'qfmt': '{{Question}}',
+             'afmt': '{{FrontSide}}<hr id="answer">{{Answer}}'
+             }
         ],
         css=deck_css
     )
-
-    test_note = genanki.Note(
-        model = test_model,
-        fields = ['This is a question', 'This is an answer']
-    )
-
-    test_deck = genanki.Deck(
-        2059400110,
-        'test_deck'
-    )
-    test_deck.add_note(test_note)
-
-    genanki.Package(test_deck).write_to_file('test.apkg')
-
-
-
+    response = requests.get(f'https://www.merriam-webster.com/dictionary/determine')
+    soup = BeautifulSoup(response.content, 'html.parser')
+    definition = soup.find(class_=['sb-0', 'sb-entry']).get_text()
+    definition1 = definition.replace('\n', ' ')
+    definition2 = definition1[8: -4]
     print('a')
+
+
+
+    # for group in columns:
+    #     anki_deck = genanki.Deck(
+    #         random.randrange(1 << 30, 1 << 31),
+    #         'test_deck'
+    #     )
+    #     for word in columns[group]:
+    #         # response = requests.get(f'https://api.dictionaryapi.dev/api/v2/entries/en/{word}').json()
+    #         definition = response[0]['meanings'][0]['definitions'][0]['definition']
+    #         synonym = None
+    #         try:
+    #             synonym = response[0]['meanings'][0]['synonyms'][0]
+    #         finally:
+    #             note = genanki.Note(
+    #                 model = deck_model,
+    #                 fields = [word, f'{definition}; {synonym}']
+    #             )
+    #         anki_deck.add_note(note)
+    #
+    #     genanki.Package(anki_deck).write_to_file(f'GRE Vocab Group {group}.apkg')
+
+
