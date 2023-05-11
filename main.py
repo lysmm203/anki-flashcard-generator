@@ -4,12 +4,15 @@ import requests
 import genanki
 import random
 from bs4 import BeautifulSoup
-from deck import Deck
 from note import Note
 from vocabulary import Vocabulary
 
 
 if __name__ == '__main__':
+
+    a = Vocabulary('abjure')
+    a.get_soup()
+    a.get_definition()
 
     with open('GRE_vocabs.csv') as f:
         csv_reader = csv.reader(f)
@@ -26,7 +29,10 @@ if __name__ == '__main__':
 
     for group in columns:
         # create deck for the group
-        curr_deck = Deck(group)
+        curr_deck = genanki.Deck(
+            random.randrange(1 << 30, 1 << 31),
+            f'GRE Vocab Group {group}'
+        )
         print(f'Currently doing group {group}')
         for word in columns[group]:
             # Get all information related to vocabulary
@@ -40,7 +46,7 @@ if __name__ == '__main__':
             note.create_note()
 
             # Add note to deck
-            curr_deck.add_note(note)
+            curr_deck.add_note(note.anki_note)
             print(f'Note added. Word: {note.vocabulary.word};')
 
         genanki.Package(curr_deck).write_to_file(f'GRE Vocab Group {group}.apkg')

@@ -14,8 +14,13 @@ class Vocabulary:
         self.soup = BeautifulSoup(response.content, 'html.parser')
 
     def get_definition(self):
-        definition_div = self.soup.find(class_=['sb-0', 'sb-entry'])
-        definition = definition_div.find(class_='dtText').text
+        definition_div = self.soup.findAll(class_=['sb-0', 'sb-entry'])
+
+        for div in definition_div:
+            if div.find(class_='dtText'):
+                definition = div.find(class_='dtText').text
+                break
+
         definition_cleaned = definition_cleanup(definition)
         self.definition = definition_cleaned
 

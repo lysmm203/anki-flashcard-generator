@@ -29,7 +29,7 @@ class Note:
         self.vocabulary = vocabulary
 
     def create_note(self):
-        formatted_answer = self.vocabulary.definition + '; ' + self.vocabulary.synonyms
+        formatted_answer = self.vocabulary.definition + '; \n' + self.vocabulary.synonyms
 
         self.anki_note = genanki.Note(
             model = self.note_model,
